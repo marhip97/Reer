@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/github-actions-pages-site-1rp06m
   workflow_dispatch:
 
 permissions:
