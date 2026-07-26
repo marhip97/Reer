@@ -310,7 +310,7 @@
   .info-item p { color: var(--ink-soft); font-size: 14.5px; }
 
   /* SIGNUP + CONTACT */
-  .signup { background: var(--bg); }
+  .signup { background: var(--bg); scroll-margin-top: 88px; }
   .signup-inner {
     max-width: 1100px;
     margin: 0 auto;
@@ -627,6 +627,7 @@
     .courses, .price-grid { grid-template-columns: 1fr; }
     .info-grid { grid-template-columns: 1fr; gap: 26px; padding: 44px 32px; }
     .signup-inner { grid-template-columns: 1fr; gap: 48px; }
+    .signup-form { order: -1; }
     .fleet-inner { grid-template-columns: 1fr; gap: 36px; }
     .tabs-inner { grid-template-columns: 1fr; gap: 44px; }
     .staff-grid { grid-template-columns: 1fr; }
@@ -998,6 +999,15 @@
           <option>Klasse B</option>
           <option>Klasse BE / B96</option>
           <option>Usikker — hjelp meg å velge</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="laerer">Ønsket kjøreskolelærer</label>
+        <select id="laerer" name="laerer">
+          <option>Reer finner en ledig lærer</option>
+          <option>Andreas Bolstad Hesjedal</option>
+          <option>Atle Hesjedal</option>
+          <option>Henrik Finsberg</option>
         </select>
       </div>
       <div class="field">
