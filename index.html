@@ -188,7 +188,7 @@
   .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; } 50% { transform: translateY(5px);} }
 
   /* SECTIONS */
-  section { padding: 96px 32px; }
+  section { padding: 120px 32px; }
   .container { max-width: 1200px; margin: 0 auto; }
   .section-header { margin-bottom: 56px; max-width: 720px; }
   .section-header.center { margin-left: auto; margin-right: auto; text-align: center; }
@@ -570,13 +570,15 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    align-items: start;
+    align-items: stretch;
   }
   .staff-card {
     background: white;
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
     transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
   }
   .staff-card:hover {
@@ -606,8 +608,8 @@
     margin-bottom: 3px;
   }
   .staff-classes { font-size: 13.5px; color: var(--ink-faint); margin-bottom: 16px; }
-  .staff-bio { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 20px; }
-  .staff-contact { border-top: 1px solid var(--line-soft); padding-top: 16px; }
+  .staff-bio { color: var(--ink-soft); font-size: 14.5px; margin-bottom: 20px; flex-grow: 1; }
+  .staff-contact { border-top: 1px solid var(--line-soft); padding-top: 16px; margin-top: auto; }
   .staff-contact a {
     display: flex;
     align-items: center;
@@ -652,7 +654,7 @@
   }
   @media (max-width: 600px) {
     .hero { padding: 40px 24px 0; }
-    section { padding: 60px 24px; }
+    section { padding: 76px 24px; }
     .nav-inner { padding: 12px 18px; }
     .utility-inner { padding: 8px 18px; font-size: 12.5px; gap: 10px; }
     .utility-left span { display: none; }
