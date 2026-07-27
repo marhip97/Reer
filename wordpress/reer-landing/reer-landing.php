@@ -60,6 +60,68 @@ add_filter( 'template_include', 'reer_landing_use_template' );
  * wp_mail() til reer@reer.no, og redirigerer tilbake (Post/Redirect/Get)
  * med ?reer_sendt=1 (ok) eller ?reer_feil=1 (feil).
  */
+/**
+ * Samle og saniter skjemafeltene fra en innsendings-kilde (typisk $_POST).
+ *
+ * @param array $src Rådata.
+ * @return array Sanerte felt.
+ */
+function reer_landing_collect_fields( $src ) {
+	return array(
+		'navn'    => isset( $src['navn'] ) ? sanitize_text_field( wp_unslash( $src['navn'] ) ) : '',
+		'telefon' => isset( $src['telefon'] ) ? sanitize_text_field( wp_unslash( $src['telefon'] ) ) : '',
+		'epost'   => isset( $src['epost'] ) ? sanitize_email( wp_unslash( $src['epost'] ) ) : '',
+		'kurs'    => isset( $src['kursvalg'] ) ? sanitize_text_field( wp_unslash( $src['kursvalg'] ) ) : '',
+		'laerer'  => isset( $src['laerer'] ) ? sanitize_text_field( wp_unslash( $src['laerer'] ) ) : '',
+		'melding' => isset( $src['melding'] ) ? sanitize_textarea_field( wp_unslash( $src['melding'] ) ) : '',
+	);
+}
+
+/**
+ * Bygg og send påmeldings-e-posten til reer@reer.no.
+ *
+ * Tidsstempelet tvinges til norsk tid (Europe/Oslo) uavhengig av
+ * WordPress' tidssone-innstilling, slik at klokkeslettet alltid stemmer.
+ *
+ * @param array $f Sanerte felt fra reer_landing_collect_fields().
+ * @return bool True hvis wp_mail lyktes.
+ */
+function reer_landing_send_mail( $f ) {
+	$blogname  = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+	$subject   = sprintf( 'Ny påmelding fra nettsiden – %s', $f['navn'] );
+	$sendt_tid = wp_date( 'd.m.Y H:i', null, new DateTimeZone( 'Europe/Oslo' ) );
+
+	$lines = array(
+		'Ny påmelding via ' . $blogname,
+		'',
+		'Navn:     ' . $f['navn'],
+		'Telefon:  ' . $f['telefon'],
+		'E-post:   ' . ( '' !== $f['epost'] ? $f['epost'] : '(ikke oppgitt)' ),
+		'Kurs:     ' . ( '' !== $f['kurs'] ? $f['kurs'] : '(ikke valgt)' ),
+		'Lærer:    ' . ( '' !== $f['laerer'] ? $f['laerer'] : '(ikke valgt)' ),
+		'',
+		'Melding:',
+		( '' !== $f['melding'] ? $f['melding'] : '(ingen melding)' ),
+		'',
+		'---',
+		'Sendt ' . $sendt_tid . ' fra ' . home_url( '/' ),
+	);
+	$body = implode( "\n", $lines );
+
+	$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
+	if ( '' !== $f['epost'] && is_email( $f['epost'] ) ) {
+		$headers[] = 'Reply-To: ' . $f['navn'] . ' <' . $f['epost'] . '>';
+	}
+
+	return (bool) wp_mail( REER_LANDING_SIGNUP_TO, $subject, $body, $headers );
+}
+
+/**
+ * Server-håndtering av skjemaet (fallback uten JavaScript).
+ *
+ * Poster til samme URL. Nonce + honeypot mot spam, wp_mail til
+ * reer@reer.no, og Post/Redirect/Get med ?reer_sendt=1 / ?reer_feil=1.
+ */
 function reer_landing_handle_signup() {
 	if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		return;
@@ -82,48 +144,44 @@ function reer_landing_handle_signup() {
 		exit;
 	}
 
-	$navn    = isset( $_POST['navn'] ) ? sanitize_text_field( wp_unslash( $_POST['navn'] ) ) : '';
-	$telefon = isset( $_POST['telefon'] ) ? sanitize_text_field( wp_unslash( $_POST['telefon'] ) ) : '';
-	$epost   = isset( $_POST['epost'] ) ? sanitize_email( wp_unslash( $_POST['epost'] ) ) : '';
-	$kurs    = isset( $_POST['kursvalg'] ) ? sanitize_text_field( wp_unslash( $_POST['kursvalg'] ) ) : '';
-	$laerer  = isset( $_POST['laerer'] ) ? sanitize_text_field( wp_unslash( $_POST['laerer'] ) ) : '';
-	$melding = isset( $_POST['melding'] ) ? sanitize_textarea_field( wp_unslash( $_POST['melding'] ) ) : '';
+	$f = reer_landing_collect_fields( $_POST );
 
 	// Navn og mobilnummer er påkrevd.
-	if ( '' === $navn || '' === $telefon ) {
+	if ( '' === $f['navn'] || '' === $f['telefon'] ) {
 		wp_safe_redirect( add_query_arg( 'reer_feil', '1', $base ) . '#pamelding' );
 		exit;
 	}
 
-	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-	$subject  = sprintf( 'Ny påmelding fra nettsiden – %s', $navn );
-
-	$lines = array(
-		'Ny påmelding via ' . $blogname,
-		'',
-		'Navn:     ' . $navn,
-		'Telefon:  ' . $telefon,
-		'E-post:   ' . ( '' !== $epost ? $epost : '(ikke oppgitt)' ),
-		'Kurs:     ' . ( '' !== $kurs ? $kurs : '(ikke valgt)' ),
-		'Lærer:    ' . ( '' !== $laerer ? $laerer : '(ikke valgt)' ),
-		'',
-		'Melding:',
-		( '' !== $melding ? $melding : '(ingen melding)' ),
-		'',
-		'---',
-		'Sendt ' . wp_date( 'd.m.Y H:i' ) . ' fra ' . home_url( '/' ),
-	);
-	$body = implode( "\n", $lines );
-
-	$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
-	if ( '' !== $epost && is_email( $epost ) ) {
-		$headers[] = 'Reply-To: ' . $navn . ' <' . $epost . '>';
-	}
-
-	$sent = wp_mail( REER_LANDING_SIGNUP_TO, $subject, $body, $headers );
-
-	$arg = $sent ? array( 'reer_sendt' => '1' ) : array( 'reer_feil' => '1' );
+	$sent = reer_landing_send_mail( $f );
+	$arg  = $sent ? array( 'reer_sendt' => '1' ) : array( 'reer_feil' => '1' );
 	wp_safe_redirect( add_query_arg( $arg, $base ) . '#pamelding' );
 	exit;
 }
 add_action( 'template_redirect', 'reer_landing_handle_signup' );
+
+/**
+ * AJAX-håndtering av skjemaet (uten omlasting). Svarer med JSON.
+ *
+ * JavaScript sender skjemaet hit; server-veien over er fallback hvis
+ * JS ikke er tilgjengelig eller AJAX feiler.
+ */
+function reer_landing_ajax_signup() {
+	check_ajax_referer( 'reer_signup_ajax', 'nonce' );
+
+	// Honeypot: lat som alt gikk bra.
+	if ( ! empty( $_POST['reer_hp'] ) ) {
+		wp_send_json_success();
+	}
+
+	$f = reer_landing_collect_fields( $_POST );
+	if ( '' === $f['navn'] || '' === $f['telefon'] ) {
+		wp_send_json_error( 'Fyll inn navn og mobilnummer.' );
+	}
+
+	if ( reer_landing_send_mail( $f ) ) {
+		wp_send_json_success();
+	}
+	wp_send_json_error( 'Kunne ikke sende akkurat nå. Prøv igjen, eller ring 930 20 620.' );
+}
+add_action( 'wp_ajax_reer_signup', 'reer_landing_ajax_signup' );
+add_action( 'wp_ajax_nopriv_reer_signup', 'reer_landing_ajax_signup' );

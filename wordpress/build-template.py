@@ -74,9 +74,7 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
       <h3>Påmelding</h3>
       <p>Vi svarer innen én virkedag — som regel raskere.</p>
       <div class="form-success<?php echo $reer_sendt ? ' show' : ''; ?>" id="formSuccess">Takk! Vi tar kontakt så snart som mulig.</div>
-      <?php if ( $reer_feil ) : ?>
-      <div class="form-error show" id="formError">Beklager, noe gikk galt under sendingen. Prøv igjen, eller ring oss på 930&nbsp;20&nbsp;620.</div>
-      <?php endif; ?>
+      <div class="form-error<?php echo $reer_feil ? ' show' : ''; ?>" id="formError">Beklager, noe gikk galt under sendingen. Prøv igjen, eller ring oss på 930&nbsp;20&nbsp;620.</div>
       <div class="field">
         <label for="navn">Navn</label>
         <input type="text" id="navn" name="navn" autocomplete="name" required>
@@ -133,20 +131,60 @@ script_pattern = re.compile(
 )
 
 new_script = '''<script>
-  // Skjemaet sendes nå på server (wp_mail). Rull til kvitteringen etter innsending.
-  // Vi venter til hele siden (inkl. store bilder) er lastet, ellers regnes
-  // feil posisjon ut og man havner på toppen i stedet for ved kvitteringen.
+  // Påmelding sendes via AJAX (uten omlasting). Faller tilbake til vanlig
+  // server-innsending hvis JavaScript/fetch ikke er tilgjengelig eller AJAX feiler.
   (function () {
-    var params = new URLSearchParams(window.location.search);
-    if (params.get('reer_sendt') !== '1' && params.get('reer_feil') !== '1') { return; }
-    function scrollToResult() {
-      var target = document.getElementById('formError') || document.getElementById('formSuccess');
-      if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    var form = document.getElementById('signupForm');
+    var successEl = document.getElementById('formSuccess');
+    var errorEl = document.getElementById('formError');
+    var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+    var ajaxNonce = '<?php echo esc_js( wp_create_nonce( 'reer_signup_ajax' ) ); ?>';
+
+    function showSuccess() {
+      if (errorEl) { errorEl.classList.remove('show'); }
+      if (successEl) {
+        successEl.classList.add('show');
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
     }
-    if (document.readyState === 'complete') {
-      setTimeout(scrollToResult, 150);
-    } else {
-      window.addEventListener('load', function () { setTimeout(scrollToResult, 150); });
+    function showError(msg) {
+      if (!errorEl) { return; }
+      if (msg) { errorEl.textContent = msg; }
+      errorEl.classList.add('show');
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (form && window.fetch && window.FormData) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        function restore() {
+          if (btn) { btn.disabled = false; if (btn.getAttribute('data-label')) { btn.textContent = btn.getAttribute('data-label'); } }
+        }
+        var data = new FormData(form);
+        data.append('action', 'reer_signup');
+        data.append('nonce', ajaxNonce);
+        if (btn) { btn.setAttribute('data-label', btn.textContent); btn.disabled = true; btn.textContent = 'Sender \\u2026'; }
+        fetch(ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
+          .then(function (r) { if (!r.ok) { throw new Error('http'); } return r.json(); })
+          .then(function (res) {
+            restore();
+            if (res && res.success) { form.reset(); showSuccess(); }
+            else { showError(res && res.data ? res.data : null); }
+          })
+          .catch(function () { restore(); form.submit(); });
+      });
+    }
+
+    // Reserve: kom vi hit via server-omlasting, rull til kvitteringen når siden er ferdig lastet.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('reer_sendt') === '1' || params.get('reer_feil') === '1') {
+      function scrollToResult() {
+        var target = (errorEl && errorEl.classList.contains('show')) ? errorEl : successEl;
+        if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      }
+      if (document.readyState === 'complete') { setTimeout(scrollToResult, 150); }
+      else { window.addEventListener('load', function () { setTimeout(scrollToResult, 150); }); }
     }
   })();
 </script>'''
