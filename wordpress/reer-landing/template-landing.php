@@ -206,7 +206,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     margin-left: auto;
     margin-right: auto;
   }
-  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; } 50% { transform: translateY(5px);} }
+  .hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
   /* SECTIONS */
   section { padding: 120px 32px; }
