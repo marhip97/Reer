@@ -5,7 +5,7 @@
  * Description:        Publiserer den ferdige forsiden til Reer & Horten Trafikkskole som en fullbredde-sidemal, uavhengig av det aktive temaet. Påmeldingsskjemaet sender e-post til reer@reer.no via WordPress (wp_mail).
  * Version:           1.0.0
  * Requires at least: 5.5
- * Requires PHP:      7.2
+ * Requires PHP:      5.6
  * Author:            Reer & Horten Trafikkskole
  * License:           GPL-2.0-or-later
  * Text Domain:       reer-landing
