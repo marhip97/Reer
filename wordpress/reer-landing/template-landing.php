@@ -1094,11 +1094,19 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
 
 <script>
   // Skjemaet sendes nå på server (wp_mail). Rull til kvitteringen etter innsending.
+  // Vi venter til hele siden (inkl. store bilder) er lastet, ellers regnes
+  // feil posisjon ut og man havner på toppen i stedet for ved kvitteringen.
   (function () {
     var params = new URLSearchParams(window.location.search);
-    if (params.get('reer_sendt') === '1' || params.get('reer_feil') === '1') {
+    if (params.get('reer_sendt') !== '1' && params.get('reer_feil') !== '1') { return; }
+    function scrollToResult() {
       var target = document.getElementById('formError') || document.getElementById('formSuccess');
       if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+    if (document.readyState === 'complete') {
+      setTimeout(scrollToResult, 150);
+    } else {
+      window.addEventListener('load', function () { setTimeout(scrollToResult, 150); });
     }
   })();
 </script>
