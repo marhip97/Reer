@@ -67,10 +67,16 @@ WPForms ligger allerede i oppsettet ditt, og er det tryggeste valget her:
 1. WPForms → **Add New** → velg en enkel «Simple Contact Form» og bygg feltene slik
    de er i designet: Navn, Mobilnummer, E-post (valgfritt), Kursvalg (dropdown),
    Ønsket lærer (dropdown), Melding (valgfritt).
-2. **Notifications:** sett **Send To Email Address** til `reer@reer.no`.
-   - Er innboksen ikke klar ennå? Sett midlertidig **din egen e-post** som mottaker
-     nå, publiser, og bytt til `reer@reer.no` når eieren har gitt tilgang. Ingenting
-     går tapt i mellomtiden, siden alt også lagres under Entries.
+2. **Notifications:** sett **Send To Email Address** til `reer@reer.no` (innboksen
+   er nå tilgjengelig via `webmail.reer.no`).
+   - **Lærervalget:** alle innsendinger går til `reer@reer.no` – valgt lærer vises som
+     et felt i e-posten. Legg feltet `{Ønsket lærer}` inn i notifikasjonens
+     meldingstekst, slik at den som leser innboksen ser hvem påmeldingen gjelder og
+     kan videreformidle. Dette er tryggere enn å sende direkte til hver lærers adresse
+     (én sikker innboks framfor tre adresser som kan feile).
+   - Vil dere *senere* også varsle læreren direkte, kan dere legge på et **betinget
+     varsel** («Conditional/Smart Notifications») som et ekstra steg – uten å endre
+     hovedflyten til `reer@reer.no`.
 3. **Confirmation:** sett en takkemelding – f.eks. samme tekst som «Takk! Vi tar
    kontakt så snart som mulig.»
 4. **Sett skjemaet inn i siden:** siden er limt inn som Custom HTML, og en
@@ -83,10 +89,29 @@ WPForms ligger allerede i oppsettet ditt, og er det tryggeste valget her:
 ### Viktig for at e-posten skal komme frem: SMTP
 
 Standard WordPress-e-post (PHP `mail()`) havner ofte i søppelpost eller feiler helt
-på delte webhoteller. **Installer «WP Mail SMTP»** og koble den til en ekte
-postkasse (f.eks. via hostens SMTP eller en tjeneste som Brevo/SendGrid). Uten dette
-kan varslene stilne – men Entries-backupen i WPForms fanger dem uansett.
-**Send en testinnsending** etter oppsett og bekreft at mailen kommer frem.
+på delte webhoteller. **Installer «WP Mail SMTP»** og koble den til hostens egen SMTP
+for `reer@reer.no`. Da sendes varslene *som* `reer@reer.no` via samme server som
+mottar dem – best mulig leveringssikkerhet.
+
+**Bekreftede innstillinger (fra cPanel → Configure Mail Client, SSL/TLS):**
+
+| Felt i WP Mail SMTP | Verdi |
+|---|---|
+| Mailer | Other SMTP |
+| SMTP Host | `mail.reer.no` |
+| Encryption | SSL |
+| SMTP Port | `465` |
+| Auto TLS | På |
+| Authentication | På |
+| SMTP Username | `reer@reer.no` |
+| SMTP Password | mailboks-passordet (skriv inn direkte i WordPress – ikke lagre i repoet) |
+| From Email | `reer@reer.no` |
+| From Name | Reer & Horten Trafikkskole |
+
+(Til info: innkommende IMAP er `mail.reer.no` port `993` – ikke nødvendig for skjemaet,
+men greit å ha.) Uten SMTP kan varslene stilne – men Entries-backupen i WPForms fanger
+dem uansett. **Send en testinnsending** etter oppsett og bekreft at mailen kommer frem
+til `reer@reer.no`.
 
 ### Alternativ hvis du vil beholde det håndlagde skjemadesignet
 
@@ -101,9 +126,8 @@ utseende), kan du koble `<form id="signupForm">` til en skjematjeneste som
   mottaker-e-posten – altså trenger du én gangs tilgang til en innboks du styrer
   (kan være din egen midlertidig).
 
-Fordi du er blokkert på `reer@reer.no`-innboksen akkurat nå, er **WPForms det
-raskeste og tryggeste** – det er det eneste alternativet du kan sette *helt* opp uten
-å vente på den innboksen.
+**WPForms er fortsatt anbefalt** – både fordi innsendinger lagres som backup under
+Entries, og fordi du slipper å verifisere mottaker-e-post hos en ekstern tjeneste.
 
 ---
 
@@ -111,8 +135,9 @@ raskeste og tryggeste** – det er det eneste alternativet du kan sette *helt* o
 
 - [ ] Full backup tatt
 - [ ] Ny side ser riktig ut på mobil og PC (forhåndsvist)
-- [ ] Skjema koblet til WPForms, med mottaker satt (evt. midlertidig din egen e-post)
-- [ ] WP Mail SMTP satt opp, og **testinnsending bekreftet mottatt**
+- [ ] Skjema koblet til WPForms, mottaker satt til `reer@reer.no`
+- [ ] Lærer-feltet (`{Ønsket lærer}`) med i varselteksten
+- [ ] WP Mail SMTP satt opp (mail.reer.no / SSL / 465), og **testinnsending bekreftet mottatt**
 - [ ] Entries-lagring bekreftet (innsendingen dukker opp under WPForms → Entries)
 - [ ] Cache tømt etter forside-bytte
 - [ ] Rollback-plan klar: Innstillinger → Lesing → velg gammel forside
