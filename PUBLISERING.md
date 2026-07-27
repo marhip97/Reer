@@ -12,6 +12,71 @@ Den nye siden ligger ferdig i `wordpress/reer-side.html` i dette repoet.
 
 ---
 
+## STATUS (hand-off) – sist oppdatert 2026-07-27
+
+Bruk dette som utgangspunkt hvis du fortsetter i en ny session.
+
+**Ferdig (ligger i repoet, branch `claude/reer-wordpress-publish-forms-fhqs72`):**
+- `wordpress/reer-side.html` – forsiden klar til innliming. Selvforsynt: 4
+  innebygde bilder (base64), ingen eksterne filer, Google Fonts via `@import`.
+- `PUBLISERING.md` – denne veiledningen.
+- SMTP-verdier bekreftet fra cPanel (se Del 2).
+- Lærervalg avklart: alt til `reer@reer.no`, valgt lærer som felt i varselet.
+
+**Gjenstår (må gjøres i WordPress – kun eier/du har tilgang):** hele
+«Master-sekvensen» under, Fase 0–6. Ingenting av dette er startet ennå.
+
+**Kjente fakta om oppsettet:**
+- Hosting: cPanel. Webmail: `webmail.reer.no` (Roundcube). Innboks tilgjengelig.
+- SMTP (bekreftet): `mail.reer.no`, SSL, port `465`, brukernavn `reer@reer.no`.
+- WordPress har ventende oppdateringer (skjermbilde: 11 totalt, WP 7.0.2, 7 utvidelser).
+- Dagens skjema kan være en gammel plugin (f.eks. Visual Form Builder) – ikke
+  slett gamle plugins før den nye siden er live.
+
+**Åpne punkter / beslutninger tatt:**
+- Skjema løses med **WPForms** (allerede installert), ikke ekstern tjeneste.
+- Publisering: lim HTML inn i WordPress-side, bytt statisk forside til slutt.
+
+---
+
+## Master-sekvens – hele prosessen i rekkefølge
+
+Dette er den autoritative rekkefølgen. Detaljer for hvert tema står i Del 1 og
+Del 2 lenger ned.
+
+### Fase 0 – Backup (aldri hopp over)
+- [ ] cPanel → «Backup» (eller UpdraftPlus) → full backup (filer + database), lastet ned lokalt.
+
+### Fase 1 – Oppdateringer (før du bygger nytt)
+- [ ] Oppdater **WPForms** og **WP Mail SMTP** (installer sistnevnte om den mangler) – test forsiden etter.
+- [ ] Oppdater resten av utvidelsene, batch for batch, test etter hver.
+- [ ] Oppdater WordPress-kjernen (7.0.2) til slutt, test etter.
+- [ ] Brekker noe: gjenopprett backup fra Fase 0. **Ikke slett gamle plugins ennå.**
+
+### Fase 2 – Skjema + e-postlevering
+- [ ] WP Mail SMTP: Other SMTP, `mail.reer.no` / SSL / `465` / `reer@reer.no` / From `reer@reer.no`.
+- [ ] Send test-e-post fra WP Mail SMTP → bekreft mottatt i `reer@reer.no`. Stopp og feilsøk hvis den ikke kommer.
+- [ ] WPForms: bygg feltene (Navn, Mobil, E-post valgfritt, Kursvalg, Ønsket lærer, Melding).
+- [ ] WPForms Notifications: Send To `reer@reer.no`, `{Ønsket lærer}` med i teksten. Confirmation: takkemelding.
+
+### Fase 3 – Bygg ny side (uten å røre den gamle)
+- [ ] Sider → Legg til ny → «Ny forside», full bredde / blank mal.
+- [ ] Custom HTML-blokk → lim inn hele `wordpress/reer-side.html`.
+- [ ] Sett skjemaseksjonen som en egen **WPForms-blokk** (kortkode virker ikke i Custom HTML).
+- [ ] Forhåndsvis mobil + PC. Prøvepåmelding → bekreft mottatt i `reer@reer.no` OG i WPForms → Entries.
+
+### Fase 4 – Go-live
+- [ ] Innstillinger → Lesing → Forsiden viser → En statisk side → «Ny forside». Lagre.
+- [ ] Tøm cache. Sjekk `reer.no` i inkognito.
+
+### Fase 5 – Rollback (hvis noe er galt)
+- [ ] Innstillinger → Lesing → velg gammel forside igjen. Øyeblikkelig, ingen nedetid.
+
+### Fase 6 – Opprydding (rolig, etterpå)
+- [ ] Når ny side har fungert en stund: deaktiver ubrukte plugins én om gangen, med sjekk etter hver.
+
+---
+
 ## Del 1 – Publiser siden uten nedetid
 
 Hovedprinsippet: **rør aldri den gamle forsiden direkte.** Lag den nye siden ved
