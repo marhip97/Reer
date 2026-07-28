@@ -103,7 +103,6 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
           <option>Reer finner en ledig lærer</option>
           <option>Andreas Bolstad Hesjedal</option>
           <option>Henrik Finsberg</option>
-          <option>Atle Hesjedal</option>
         </select>
       </div>
       <div class="field">
