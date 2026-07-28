@@ -204,7 +204,8 @@
   .section-lead { font-size: 17px; color: var(--ink-soft); }
 
   /* COURSES */
-  .courses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .courses { display: grid; grid-template-columns: 1.25fr 1fr; gap: 24px; align-items: stretch; }
+  .courses #tgk { grid-column: 1; grid-row: 1 / span 2; }
   .course {
     background: white;
     border: 1px solid var(--line);
@@ -238,8 +239,8 @@
     margin-bottom: 12px;
     letter-spacing: -0.01em;
   }
-  .course p { color: var(--ink-soft); font-size: 15px; margin-bottom: 26px; flex-grow: 1; }
-  .course-links { display: flex; gap: 20px; padding-top: 20px; border-top: 1px solid var(--line-soft); }
+  .course p { color: var(--ink-soft); font-size: 15px; margin-bottom: 26px; }
+  .course-links { display: flex; gap: 20px; padding-top: 20px; border-top: 1px solid var(--line-soft); margin-top: auto; }
   .course-link {
     color: var(--accent);
     text-decoration: none;
@@ -663,6 +664,7 @@
   /* RESPONSIVE */
   @media (max-width: 900px) {
     .courses, .price-grid { grid-template-columns: 1fr; }
+    .courses #tgk { grid-row: auto; grid-column: auto; }
     .info-grid { grid-template-columns: 1fr; gap: 26px; padding: 44px 32px; }
     .signup-inner { grid-template-columns: 1fr; gap: 48px; }
     .signup-form { order: -1; }
