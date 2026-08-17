@@ -119,6 +119,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     transition: background 0.2s, color 0.2s;
   }
   .nav-links a:hover { background: var(--bg-warm); }
+  .nav-cta { font-size: 16px; padding: 12px 26px; }
 
   .btn {
     display: inline-flex;
@@ -376,7 +377,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     gap: 72px;
-    align-items: center;
+    align-items: start;
   }
   .signup-left h2 { font-size: clamp(30px, 4vw, 44px); margin-bottom: 18px; }
   .signup-left > p { color: var(--ink-soft); font-size: 17px; margin-bottom: 34px; max-width: 420px; }
@@ -772,9 +773,9 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
       <li><a href="#be">Klasse BE / B96</a></li>
       <li><a href="#priser">Priser</a></li>
       <li><a href="#ansatte">Ansatte</a></li>
-      <li><a href="#tabs">Tabs</a></li>
+      <li><a href="#tabs">Elevappen TABS</a></li>
     </ul>
-    <a href="#pamelding" class="btn primary">Kontakt oss</a>
+    <a href="#pamelding" class="btn primary nav-cta">Kontakt oss</a>
     <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Åpne meny" aria-expanded="false">
       <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
@@ -789,7 +790,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     <div class="road-divider" aria-hidden="true"></div>
     <p class="hero-lead">Vi tar deg trygt fra første kjøretime til ferdig førerkort — i klasse B og BE/B96.</p>
     <div class="hero-ctas">
-      <a href="#pamelding" class="btn lg primary">Meld deg på</a>
+      <a href="#pamelding" class="btn lg primary">Kontakt oss</a>
       <a href="#kurs" class="btn lg">Se kursene</a>
     </div>
     <br>
@@ -1021,7 +1022,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     <div class="signup-left">
       <div class="section-eyebrow">Kom i gang</div>
       <h2 class="display">Ta kontakt — vi hjelper deg i gang.</h2>
-      <p>Fyll ut skjemaet, så tar vi kontakt og finner kurs og tidspunkt som passer deg. Du kan selvsagt også ringe eller sende e-post.</p>
+      <p>Fyll ut skjemaet, så tar vi kontakt og finner kurs og tidspunkt som passer deg.</p>
 
       <dl>
         <div class="contact-block">
