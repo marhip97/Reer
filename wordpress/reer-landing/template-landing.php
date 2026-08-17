@@ -109,9 +109,10 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
   .nav-links a {
     color: var(--ink);
     text-decoration: none;
-    padding: 12px 14px;
+    padding: 12px 13px;
     font-size: 14px;
     font-weight: 500;
+    white-space: nowrap;
     border-radius: 6px;
     display: inline-flex;
     align-items: center;
@@ -375,7 +376,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     gap: 72px;
-    align-items: start;
+    align-items: center;
   }
   .signup-left h2 { font-size: clamp(30px, 4vw, 44px); margin-bottom: 18px; }
   .signup-left > p { color: var(--ink-soft); font-size: 17px; margin-bottom: 34px; max-width: 420px; }
@@ -772,9 +773,8 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
       <li><a href="#priser">Priser</a></li>
       <li><a href="#ansatte">Ansatte</a></li>
       <li><a href="#tabs">Tabs</a></li>
-      <li><a href="#pamelding">Kontakt</a></li>
     </ul>
-    <a href="#pamelding" class="btn primary">Meld deg på</a>
+    <a href="#pamelding" class="btn primary">Kontakt oss</a>
     <button class="mobile-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Åpne meny" aria-expanded="false">
       <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
