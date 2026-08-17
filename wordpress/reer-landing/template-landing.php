@@ -1020,7 +1020,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
   <div class="signup-inner">
     <div class="signup-left">
       <div class="section-eyebrow">Kom i gang</div>
-      <h2 class="display">Meld deg på — det tar under ett minutt.</h2>
+      <h2 class="display">Ta kontakt — vi hjelper deg i gang.</h2>
       <p>Fyll ut skjemaet, så tar vi kontakt og finner kurs og tidspunkt som passer deg. Du kan selvsagt også ringe eller sende e-post.</p>
 
       <dl>
