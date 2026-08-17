@@ -71,7 +71,7 @@ form_pattern = re.compile(
 )
 
 new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?php echo $reer_action; ?>#pamelding">
-      <h3>Påmelding</h3>
+      <h3>Kontakt oss</h3>
       <p>Vi svarer innen én virkedag — som regel raskere.</p>
       <div class="form-success<?php echo $reer_sendt ? ' show' : ''; ?>" id="formSuccess">Takk! Vi tar kontakt så snart som mulig.</div>
       <div class="form-error<?php echo $reer_feil ? ' show' : ''; ?>" id="formError">Beklager, noe gikk galt under sendingen. Prøv igjen, eller ring oss på 930&nbsp;20&nbsp;620.</div>
@@ -86,6 +86,10 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
       <div class="field">
         <label for="epost">E-post (valgfritt)</label>
         <input type="email" id="epost" name="epost" autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="fodselsdato">Fødselsdato</label>
+        <input type="date" id="fodselsdato" name="fodselsdato" min="1930-01-01" max="2012-12-31">
       </div>
       <div class="field">
         <label for="kursvalg">Hvilket kurs gjelder det?</label>
@@ -109,13 +113,25 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
         <label for="melding">Melding (valgfritt)</label>
         <textarea id="melding" name="melding" placeholder="F.eks. når du ønsker å starte"></textarea>
       </div>
+      <div class="field">
+        <label for="kilde">Hvor hørte du om oss?</label>
+        <select id="kilde" name="kilde">
+          <option value="">Velg …</option>
+          <option>Google eller søk på nett</option>
+          <option>Venner eller bekjente</option>
+          <option>Familie</option>
+          <option>Sosiale medier (Facebook/Instagram)</option>
+          <option>Så skolebilene</option>
+          <option>Annet</option>
+        </select>
+      </div>
       <?php wp_nonce_field( 'reer_signup', 'reer_signup_nonce' ); ?>
       <div class="reer-hp" aria-hidden="true">
         <label>La dette feltet stå tomt
           <input type="text" name="reer_hp" tabindex="-1" autocomplete="off">
         </label>
       </div>
-      <button type="submit" class="btn lg primary" style="width:100%;">Send påmelding</button>
+      <button type="submit" class="btn lg primary" style="width:100%;">Send melding</button>
       <p class="form-hint">Uforpliktende — vi kontakter deg for å avtale detaljer.</p>
     </form>'''
 

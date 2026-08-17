@@ -68,12 +68,14 @@ add_filter( 'template_include', 'reer_landing_use_template' );
  */
 function reer_landing_collect_fields( $src ) {
 	return array(
-		'navn'    => isset( $src['navn'] ) ? sanitize_text_field( wp_unslash( $src['navn'] ) ) : '',
-		'telefon' => isset( $src['telefon'] ) ? sanitize_text_field( wp_unslash( $src['telefon'] ) ) : '',
-		'epost'   => isset( $src['epost'] ) ? sanitize_email( wp_unslash( $src['epost'] ) ) : '',
-		'kurs'    => isset( $src['kursvalg'] ) ? sanitize_text_field( wp_unslash( $src['kursvalg'] ) ) : '',
-		'laerer'  => isset( $src['laerer'] ) ? sanitize_text_field( wp_unslash( $src['laerer'] ) ) : '',
-		'melding' => isset( $src['melding'] ) ? sanitize_textarea_field( wp_unslash( $src['melding'] ) ) : '',
+		'navn'        => isset( $src['navn'] ) ? sanitize_text_field( wp_unslash( $src['navn'] ) ) : '',
+		'telefon'     => isset( $src['telefon'] ) ? sanitize_text_field( wp_unslash( $src['telefon'] ) ) : '',
+		'epost'       => isset( $src['epost'] ) ? sanitize_email( wp_unslash( $src['epost'] ) ) : '',
+		'fodselsdato' => isset( $src['fodselsdato'] ) ? sanitize_text_field( wp_unslash( $src['fodselsdato'] ) ) : '',
+		'kurs'        => isset( $src['kursvalg'] ) ? sanitize_text_field( wp_unslash( $src['kursvalg'] ) ) : '',
+		'laerer'      => isset( $src['laerer'] ) ? sanitize_text_field( wp_unslash( $src['laerer'] ) ) : '',
+		'melding'     => isset( $src['melding'] ) ? sanitize_textarea_field( wp_unslash( $src['melding'] ) ) : '',
+		'kilde'       => isset( $src['kilde'] ) ? sanitize_text_field( wp_unslash( $src['kilde'] ) ) : '',
 	);
 }
 
@@ -88,17 +90,26 @@ function reer_landing_collect_fields( $src ) {
  */
 function reer_landing_send_mail( $f ) {
 	$blogname  = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-	$subject   = sprintf( 'Ny påmelding fra nettsiden – %s', $f['navn'] );
+	$subject   = sprintf( 'Ny henvendelse fra nettsiden – %s', $f['navn'] );
 	$sendt_tid = wp_date( 'd.m.Y H:i', null, new DateTimeZone( 'Europe/Oslo' ) );
 
+	// Vis fødselsdato som dd.mm.åååå hvis den er en gyldig dato.
+	$fdato = '';
+	if ( '' !== $f['fodselsdato'] ) {
+		$dt    = DateTime::createFromFormat( 'Y-m-d', $f['fodselsdato'] );
+		$fdato = $dt ? $dt->format( 'd.m.Y' ) : $f['fodselsdato'];
+	}
+
 	$lines = array(
-		'Ny påmelding via ' . $blogname,
+		'Ny henvendelse via ' . $blogname,
 		'',
-		'Navn:     ' . $f['navn'],
-		'Telefon:  ' . $f['telefon'],
-		'E-post:   ' . ( '' !== $f['epost'] ? $f['epost'] : '(ikke oppgitt)' ),
-		'Kurs:     ' . ( '' !== $f['kurs'] ? $f['kurs'] : '(ikke valgt)' ),
-		'Lærer:    ' . ( '' !== $f['laerer'] ? $f['laerer'] : '(ikke valgt)' ),
+		'Navn:        ' . $f['navn'],
+		'Telefon:     ' . $f['telefon'],
+		'E-post:      ' . ( '' !== $f['epost'] ? $f['epost'] : '(ikke oppgitt)' ),
+		'Fødselsdato: ' . ( '' !== $fdato ? $fdato : '(ikke oppgitt)' ),
+		'Kurs:        ' . ( '' !== $f['kurs'] ? $f['kurs'] : '(ikke valgt)' ),
+		'Lærer:       ' . ( '' !== $f['laerer'] ? $f['laerer'] : '(ikke valgt)' ),
+		'Hørte om oss: ' . ( '' !== $f['kilde'] ? $f['kilde'] : '(ikke oppgitt)' ),
 		'',
 		'Melding:',
 		( '' !== $f['melding'] ? $f['melding'] : '(ingen melding)' ),
