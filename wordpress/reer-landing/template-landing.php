@@ -874,7 +874,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
       </div>
       <div class="price-card">
         <h4>Klasse B</h4>
-        <p class="price-valid">Gjelder fra 01.05.25</p>
+        <p class="price-valid">Gjelder fra 01.09.26</p>
         <div class="price-row"><span>Kjøretime bil</span><span>kr 920</span></div>
         <div class="price-row"><span>Trinnvurdering trinn 2</span><span>kr 920</span></div>
         <div class="price-row"><span>Trinnvurdering trinn 3</span><span>kr 1 200</span></div>
