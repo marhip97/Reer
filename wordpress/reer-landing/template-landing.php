@@ -875,18 +875,18 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
       <div class="price-card">
         <h4>Klasse B</h4>
         <p class="price-valid">Gjelder fra 01.05.25</p>
-        <div class="price-row"><span>Kjøretime bil</span><span>kr 900</span></div>
-        <div class="price-row"><span>Trinnvurdering trinn 2</span><span>kr 900</span></div>
-        <div class="price-row"><span>Trinnvurdering trinn 3</span><span>kr 1 170</span></div>
-        <div class="price-row"><span>Sikkerhetskurs på bane</span><span>kr 5 300</span></div>
+        <div class="price-row"><span>Kjøretime bil</span><span>kr 920</span></div>
+        <div class="price-row"><span>Trinnvurdering trinn 2</span><span>kr 920</span></div>
+        <div class="price-row"><span>Trinnvurdering trinn 3</span><span>kr 1 200</span></div>
+        <div class="price-row"><span>Sikkerhetskurs på bane</span><span>kr 5 400</span></div>
         <div class="price-row"><span>Avgift til NAF</span><span>kr 1 500</span></div>
-        <div class="price-row"><span>Risikoteori</span><span>kr 930</span></div>
-        <div class="price-row"><span>Langkjøring 1</span><span>kr 5 990</span></div>
-        <div class="price-row"><span>Langkjøring 2</span><span>kr 5 035</span></div>
-        <div class="price-row"><span>Teori, oppsummering/refleksjon</span><span>kr 930</span></div>
-        <div class="price-row"><span>Kjøretest</span><span>kr 1 800</span></div>
-        <div class="price-row"><span>Bil til førerprøven</span><span>kr 2 850</span></div>
-        <div class="price-row"><span>Vurderingsprøve</span><span>kr 4 110</span></div>
+        <div class="price-row"><span>Risikoteori</span><span>kr 950</span></div>
+        <div class="price-row"><span>Langkjøring 1</span><span>kr 6 100</span></div>
+        <div class="price-row"><span>Langkjøring 2</span><span>kr 5 150</span></div>
+        <div class="price-row"><span>Teori, oppsummering/refleksjon</span><span>kr 950</span></div>
+        <div class="price-row"><span>Kjøretest</span><span>kr 1 840</span></div>
+        <div class="price-row"><span>Bil til førerprøven</span><span>kr 2 900</span></div>
+        <div class="price-row"><span>Vurderingsprøve</span><span>kr 4 200</span></div>
       </div>
       <div class="price-card">
         <h4>Klasse BE / B96</h4>
@@ -1067,7 +1067,8 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
         <select id="kursvalg" name="kursvalg">
           <option>Trafikalt grunnkurs — Horten</option>
           <option>Trafikalt grunnkurs — Revetal</option>
-          <option>Klasse B</option>
+          <option>Klasse B — manuell</option>
+          <option>Klasse B — automat</option>
           <option>Klasse BE / B96</option>
           <option>Usikker — hjelp meg å velge</option>
         </select>
@@ -1082,7 +1083,7 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
       </div>
       <div class="field">
         <label for="melding">Melding (valgfritt)</label>
-        <textarea id="melding" name="melding" placeholder="F.eks. når du ønsker å starte"></textarea>
+        <textarea id="melding" name="melding" placeholder="Spørsmål eller noe vi bør vite?"></textarea>
       </div>
       <div class="field">
         <label for="kilde">Hvor hørte du om oss?</label>

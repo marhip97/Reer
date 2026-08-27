@@ -96,7 +96,8 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
         <select id="kursvalg" name="kursvalg">
           <option>Trafikalt grunnkurs — Horten</option>
           <option>Trafikalt grunnkurs — Revetal</option>
-          <option>Klasse B</option>
+          <option>Klasse B — manuell</option>
+          <option>Klasse B — automat</option>
           <option>Klasse BE / B96</option>
           <option>Usikker — hjelp meg å velge</option>
         </select>
@@ -111,7 +112,7 @@ new_form = '''<form class="signup-form" id="signupForm" method="post" action="<?
       </div>
       <div class="field">
         <label for="melding">Melding (valgfritt)</label>
-        <textarea id="melding" name="melding" placeholder="F.eks. når du ønsker å starte"></textarea>
+        <textarea id="melding" name="melding" placeholder="Spørsmål eller noe vi bør vite?"></textarea>
       </div>
       <div class="field">
         <label for="kilde">Hvor hørte du om oss?</label>
