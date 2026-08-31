@@ -294,6 +294,8 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
     margin-bottom: 10px;
   }
   .course-dates ul { list-style: none; }
+  .course-round + .course-round { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+  .round-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink); margin: 0 0 4px; }
   .course-dates li {
     font-size: 14px;
     color: var(--ink-soft);
@@ -816,12 +818,24 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
         <p>Her starter alle. Kurset er obligatorisk uansett klasse, og når det er fullført kan du begynne å øvelseskjøre. Fem kvelder, i Horten eller Revetal. Er du over 25, trenger du kun førstehjelp og mørkekjøring.</p>
         <div class="course-dates">
           <strong>Neste kurs</strong>
-          <ul>
-            <li>Onsdag 26. august · 15:45–18:15 <span>oppstart</span></li>
-            <li>Torsdag 27. august · 15:45–18:15</li>
-            <li>Onsdag 2. september · 15:45–18:15</li>
-            <li>Torsdag 3. september · 15:45–18:45</li>
-          </ul>
+          <div class="course-round">
+            <span class="round-label">Høst 2026</span>
+            <ul>
+              <li>Tirsdag 27. oktober · 15:45–18:15 <span>oppstart</span></li>
+              <li>Torsdag 29. oktober · 15:45–18:15</li>
+              <li>Tirsdag 3. november · 15:45–18:15</li>
+              <li>Torsdag 5. november · 15:45–18:45</li>
+            </ul>
+          </div>
+          <div class="course-round">
+            <span class="round-label">Vinter 2027</span>
+            <ul>
+              <li>Tirsdag 12. januar · 15:45–18:15 <span>oppstart</span></li>
+              <li>Torsdag 14. januar · 15:45–18:15</li>
+              <li>Tirsdag 19. januar · 15:45–18:15</li>
+              <li>Torsdag 21. januar · 15:45–18:45</li>
+            </ul>
+          </div>
         </div>
         <div class="course-links">
           <a href="#pamelding" class="course-link">Meld deg på <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
