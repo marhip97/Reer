@@ -1,3 +1,24 @@
+<?php
+/**
+ * Template Name: Reer – Forside (fullbredde)
+ *
+ * Selvstendig landingsside for Reer & Horten Trafikkskole. Rendres uavhengig
+ * av det aktive temaet (lastes via template_include i reer-landing.php).
+ *
+ * Denne filen er GENERERT av wordpress/build-template.py – ikke rediger
+ * den for hånd. Endre index.html og kjør skriptet på nytt.
+ *
+ * @package Reer_Landing
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Ingen direkte tilgang.
+}
+
+$reer_sendt = isset( $_GET['reer_sendt'] ) && '1' === $_GET['reer_sendt'];
+$reer_feil  = isset( $_GET['reer_feil'] ) && '1' === $_GET['reer_feil'];
+$reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) );
+?>
 <!DOCTYPE html>
 <html lang="nb">
 <head>
@@ -721,7 +742,12 @@
   .hero h1 { animation-delay: 0.08s; }
   .hero-lead { animation-delay: 0.16s; }
   .hero-ctas { animation-delay: 0.24s; }
+  /* Reer landing: honeypot + feilmelding (lagt til av build-template.py) */
+  .reer-hp { position: absolute !important; left: -9999px !important; top: auto !important; width: 1px; height: 1px; overflow: hidden; }
+  .form-error { display: none; margin-bottom: 18px; padding: 12px 16px; border: 1px solid #d33; border-radius: 10px; background: #fdf2f2; color: #9b1c1c; font-size: 14px; }
+  .form-error.show { display: block; }
 </style>
+<?php wp_head(); ?>
 </head>
 <body>
 
@@ -1029,10 +1055,11 @@
       </a>
     </div>
 
-    <form class="signup-form" id="signupForm">
+    <form class="signup-form" id="signupForm" method="post" action="<?php echo $reer_action; ?>#pamelding">
       <h3>Kontakt oss</h3>
       <p>Vi svarer innen én virkedag — som regel raskere.</p>
-      <div class="form-success" id="formSuccess">Takk! Vi tar kontakt så snart som mulig.</div>
+      <div class="form-success<?php echo $reer_sendt ? ' show' : ''; ?>" id="formSuccess">Takk! Vi tar kontakt så snart som mulig.</div>
+      <div class="form-error<?php echo $reer_feil ? ' show' : ''; ?>" id="formError">Beklager, noe gikk galt under sendingen. Prøv igjen, eller ring oss på 930&nbsp;20&nbsp;620.</div>
       <div class="field">
         <label for="navn">Navn</label>
         <input type="text" id="navn" name="navn" autocomplete="name" required>
@@ -1084,6 +1111,12 @@
           <option>Annet</option>
         </select>
       </div>
+      <?php wp_nonce_field( 'reer_signup', 'reer_signup_nonce' ); ?>
+      <div class="reer-hp" aria-hidden="true">
+        <label>La dette feltet stå tomt
+          <input type="text" name="reer_hp" tabindex="-1" autocomplete="off">
+        </label>
+      </div>
       <button type="submit" class="btn lg primary" style="width:100%;">Send melding</button>
       <p class="form-hint">Uforpliktende — vi kontakter deg for å avtale detaljer.</p>
     </form>
@@ -1124,14 +1157,64 @@
 </footer>
 
 <script>
-  document.getElementById('signupForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    document.getElementById('formSuccess').classList.add('show');
-    this.reset();
-    document.getElementById('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    // NB: Koble skjemaet til e-post/backend (f.eks. Formspree eller eget API) før publisering.
-  });
+  // Påmelding sendes via AJAX (uten omlasting). Faller tilbake til vanlig
+  // server-innsending hvis JavaScript/fetch ikke er tilgjengelig eller AJAX feiler.
+  (function () {
+    var form = document.getElementById('signupForm');
+    var successEl = document.getElementById('formSuccess');
+    var errorEl = document.getElementById('formError');
+    var ajaxUrl = '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>';
+    var ajaxNonce = '<?php echo esc_js( wp_create_nonce( 'reer_signup_ajax' ) ); ?>';
+
+    function showSuccess() {
+      if (errorEl) { errorEl.classList.remove('show'); }
+      if (successEl) {
+        successEl.classList.add('show');
+        successEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+    function showError(msg) {
+      if (!errorEl) { return; }
+      if (msg) { errorEl.textContent = msg; }
+      errorEl.classList.add('show');
+      errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    if (form && window.fetch && window.FormData) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var btn = form.querySelector('button[type="submit"]');
+        function restore() {
+          if (btn) { btn.disabled = false; if (btn.getAttribute('data-label')) { btn.textContent = btn.getAttribute('data-label'); } }
+        }
+        var data = new FormData(form);
+        data.append('action', 'reer_signup');
+        data.append('nonce', ajaxNonce);
+        if (btn) { btn.setAttribute('data-label', btn.textContent); btn.disabled = true; btn.textContent = 'Sender \u2026'; }
+        fetch(ajaxUrl, { method: 'POST', body: data, credentials: 'same-origin' })
+          .then(function (r) { if (!r.ok) { throw new Error('http'); } return r.json(); })
+          .then(function (res) {
+            restore();
+            if (res && res.success) { form.reset(); showSuccess(); }
+            else { showError(res && res.data ? res.data : null); }
+          })
+          .catch(function () { restore(); form.submit(); });
+      });
+    }
+
+    // Reserve: kom vi hit via server-omlasting, rull til kvitteringen når siden er ferdig lastet.
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('reer_sendt') === '1' || params.get('reer_feil') === '1') {
+      function scrollToResult() {
+        var target = (errorEl && errorEl.classList.contains('show')) ? errorEl : successEl;
+        if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      }
+      if (document.readyState === 'complete') { setTimeout(scrollToResult, 150); }
+      else { window.addEventListener('load', function () { setTimeout(scrollToResult, 150); }); }
+    }
+  })();
 </script>
 
+<?php wp_footer(); ?>
 </body>
 </html>

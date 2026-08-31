@@ -1,0 +1,6 @@
+# Node-avhengigheter (brukes kun lokalt til nettleser-måling/screenshots)
+node_modules/
+package-lock.json
+
+# OS-filer
+.DS_Store
