@@ -827,15 +827,6 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
               <li>Torsdag 5. november · 15:45–18:45</li>
             </ul>
           </div>
-          <div class="course-round">
-            <span class="round-label">Vinter 2027</span>
-            <ul>
-              <li>Tirsdag 12. januar · 15:45–18:15 <span>oppstart</span></li>
-              <li>Torsdag 14. januar · 15:45–18:15</li>
-              <li>Tirsdag 19. januar · 15:45–18:15</li>
-              <li>Torsdag 21. januar · 15:45–18:45</li>
-            </ul>
-          </div>
         </div>
         <div class="course-links">
           <a href="#pamelding" class="course-link">Meld deg på <svg viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
