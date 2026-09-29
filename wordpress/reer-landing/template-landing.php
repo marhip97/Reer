@@ -819,15 +819,6 @@ $reer_action = esc_url( remove_query_arg( array( 'reer_sendt', 'reer_feil' ) ) )
         <div class="course-dates">
           <strong>Neste kurs</strong>
           <div class="course-round">
-            <span class="round-label">Høst 2026</span>
-            <ul>
-              <li>Tirsdag 27. oktober · 15:45–18:15 <span>oppstart</span></li>
-              <li>Torsdag 29. oktober · 15:45–18:15</li>
-              <li>Tirsdag 3. november · 15:45–18:15</li>
-              <li>Torsdag 5. november · 15:45–18:45</li>
-            </ul>
-          </div>
-          <div class="course-round">
             <span class="round-label">Vinter 2027</span>
             <ul>
               <li>Tirsdag 12. januar · 15:45–18:15 <span>oppstart</span></li>
